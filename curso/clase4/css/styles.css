@@ -1,0 +1,15 @@
+#locaciones{
+    display: flex;
+    flex-wrap: wrap;
+}
+    #locaciones h1{
+        width: 100%;
+    }
+    #locaciones article{
+        width: 400px;
+        padding: 12px;
+        box-shadow: 0px 0px 5px #ccc;
+    }
+    #locaciones article img{
+        width: 100%;
+    }
