@@ -14,6 +14,16 @@
         return $resultado;
     }
 
+    function verMarcaPorID( string $idMarca ) : array
+    {
+        $link = conectar();
+        $sql = 'SELECT * 
+                    FROM marcas
+                    WHERE idMarca = '.$idMarca;
+        $resultado = mysqli_query($link, $sql);
+        return mysqli_fetch_assoc( $resultado );
+    }
+
     function agregarMarca( $mkNombre ) : bool
     {
         $link = conectar();
@@ -31,6 +41,24 @@
         }
     }
 
+    function modificarMarca() : bool
+    {
+        $mkNombre = $_POST['mkNombre'];
+        $idMarca =  $_POST['idMarca'];
+
+        $link = conectar();
+        $sql = "UPDATE marcas 
+                    SET mkNombre = '".$mkNombre."'
+                    WHERE idMarca = ".$idMarca;
+        try {
+            $resultado = mysqli_query($link, $sql);
+            return $resultado;
+        }
+        catch ( Exception $e ){
+            //echo $e->getMessage();
+            return false;
+        }
+    }
 
 /*
  *  listarMarcas()

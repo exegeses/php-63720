@@ -1,14 +1,14 @@
 <?php
     //require 'config/config.php';
     require 'funciones/conexion.php';
-    require 'funciones/marcas.php';
-    $marcas = listarMarcas();
+    require 'funciones/productos.php';
+    $productos = listarProductos();
 	include 'layout/header.php';
 	include 'layout/nav.php';
 ?>
 
     <main class="container py-4">
-        <h1>Panel de administración de marcas</h1>
+        <h1>Panel de administración de productos</h1>
 
         <a href="admin.php" class="btn btn-outline-secondary my-2">
             Volver a dashboard
@@ -17,10 +17,13 @@
         <table class="table table-borderless table-striped table-hover">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Imagen</th>
+                    <th>Producto</th>
+                    <th>Precio</th>
                     <th>Marca</th>
+                    <th>Categoria</th>
                     <th colspan="2">
-                        <a href="formAgregarMarca.php" class="btn btn-outline-secondary">
+                        <a href="" class="btn btn-outline-secondary">
                             Agregar
                         </a>
                     </th>
@@ -28,13 +31,18 @@
             </thead>
             <tbody>
 <?php
-        while ( $marca = mysqli_fetch_assoc( $marcas ) ){
-?>
+            while ( $producto = mysqli_fetch_assoc( $productos ) ){
+?>            
                 <tr>
-                    <td><?= $marca['idMarca'] ?></td>
-                    <td><?= $marca['mkNombre'] ?></td>
                     <td>
-                        <a href="formModificarMarca.php?idMarca=<?= $marca['idMarca'] ?>" class="btn btn-outline-secondary">
+                        <img src="productos/<?= $producto['prdImagen'] ?>" class="img-thumbnail">
+                    </td>
+                    <td><?= $producto['prdNombre'] ?></td>
+                    <td><?= $producto['prdPrecio'] ?></td>
+                    <td><?= $producto['mkNombre'] ?></td>
+                    <td><?= $producto['catNombre'] ?></td>
+                    <td>
+                        <a href="" class="btn btn-outline-secondary">
                             Modificar
                         </a>
                     </td>
@@ -45,7 +53,7 @@
                     </td>
                 </tr>
 <?php
-        }
+            }
 ?>
             </tbody>
         </table>
