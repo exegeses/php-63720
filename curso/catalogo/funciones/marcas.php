@@ -60,6 +60,45 @@
         }
     }
 
+
+    /**
+     * Función para verificar si existen productos
+     * asociados a una marca
+     * @param string $idMarca
+     * @return bool
+     */
+    function verificarProductoPorMarca( string $idMarca ) : int
+    {
+        $link = conectar();
+        $sql = "SELECT 1 FROM productos
+                    WHERE idMarca = ".$idMarca;
+        try{
+            $resultado = mysqli_query( $link, $sql );
+            $cantidad = mysqli_num_rows( $resultado );
+            return $cantidad;
+        }
+        catch ( Exception $e ){
+            echo $e->getMessage();
+            $cantidad = 0;
+            return $cantidad;
+        }
+    }
+
+    function eliminarMarca( string $idMarca ) : bool
+    {
+        $link = conectar();
+        $sql = "DELETE FROM marcas
+                    WHERE idMarca = ".$idMarca;
+        try {
+            $resultado = mysqli_query( $link,  $sql );
+            return $resultado;
+        }
+        catch ( Exception $e ){
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
 /*
  *  listarMarcas()
     verMarcaPorID()

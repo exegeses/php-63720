@@ -19,6 +19,10 @@
 ?>        
         <div class="alert alert-<?= $css ?> col-6 mx-auto">
             <?= $mensaje ?>
+            <br>
+            <a href="adminMarcas.php" class="btn btn-secondary">
+                Volver a panel de marcas
+            </a>
         </div>
 <?php
     }
