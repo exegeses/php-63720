@@ -73,7 +73,12 @@
     function verProductoPorID( string $idProducto ) : array
     {
         $link = conectar();
-        $sql = 'SELECT * FROM productos
+        $sql = 'SELECT * 
+                    FROM productos
+                    JOIN marcas m 
+                        ON productos.idMarca = m.idMarca
+                    JOIN categorias c 
+                        ON c.idCategoria = productos.idCategoria
                     WHERE idProducto = '.$idProducto;
         $resultado = mysqli_query($link, $sql);
         return mysqli_fetch_assoc($resultado);
@@ -98,6 +103,21 @@
                         idCategoria = ".$idCategoria.",
                         prdDescripcion = '".$prdDescripcion."',
                         prdImagen = '".$prdImagen."'
+                    WHERE idProducto = ".$idProducto;
+        try {
+            $resultado = mysqli_query($link,$sql);
+            return $resultado;
+        }
+        catch ( Exception $e ){
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    function eliminarProducto( int $idProducto ) : bool
+    {
+        $link = conectar();
+        $sql = "DELETE FROM productos
                     WHERE idProducto = ".$idProducto;
         try {
             $resultado = mysqli_query($link,$sql);

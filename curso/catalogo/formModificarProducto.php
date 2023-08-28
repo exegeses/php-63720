@@ -6,7 +6,7 @@
     require 'funciones/productos.php';
     $marcas = listarMarcas();
     $categorias = listarCategorias();
-    $producto = verProductoPorID($_GET['id']);
+    $producto = verProductoPorID($_GET['idProducto']);
 	include 'layout/header.php';
 	include 'layout/nav.php';
 ?>
