@@ -26,10 +26,15 @@
 <?php
         if( isset($_GET['error']) ){
             $error = $_GET['error'];
+
+            $mensaje = match( $error ){
+                '1' => 'Usuario y/o clave incorrectos (o usuario desactivado)',
+                '2' => 'Debe loguearse para realizar esta acción'
+            };
+
 ?>
         <div class="alert bg-light p-4 col-8 text-danger mx-auto shadow">
-            Usuario y/o clave incorrectos
-            (o usuario desactivado)
+            <?= $mensaje ?>
         </div>
 <?php
         }
