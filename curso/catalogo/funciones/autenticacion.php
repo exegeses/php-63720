@@ -64,3 +64,14 @@
             header('location: formLogin.php?error=2');
         }
     }
+
+/**
+ * función para redireccionar a un usuario que no sea administrador
+ * @return void
+ */
+    function noAdmin() : void
+    {
+        if( $_SESSION['idRol'] != 1 ){
+            header('location: noAdmin.php');
+        }
+    }

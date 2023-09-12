@@ -4,8 +4,20 @@
      * CRUD de usuarios
      */
 
-    function listarUsuarios()
-    {}
+    function listarUsuarios() : mysqli_result
+    {
+        $link = conectar();
+        $sql = "SELECT idUsuario, usuNombre, usuApellido,
+                        usuEmail,
+                        rol
+                FROM usuarios u
+                JOIN roles r 
+                  ON u.idRol = r.idRol";
+            //WHERE idUsuario != ".$_SESSION['idUsuario'];
+
+        $resultado = mysqli_query($link, $sql);
+        return $resultado;
+    }
 
     function registrarUsuario() : bool
     {
