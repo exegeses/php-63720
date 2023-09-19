@@ -88,3 +88,54 @@ function verUsuarioPorID(  ) : array
             return false;
         }
     }
+
+    function modificarClave() : bool
+    {
+        //capturamos clave actual SIN ENCRIPTAR
+        $usuClave = $_POST['clave'];
+        /** obtenemos clave encriptada */
+        $link = conectar();
+        $sql = "SELECT usuClave 
+                  FROM usuarios 
+                  WHERE idUsuario = ".$_SESSION['idUsuario'];
+        try {
+            $resultado = mysqli_query($link, $sql);
+        }
+        catch ( Exception $e ){
+            echo $e->getMessage();
+            return false;
+        }
+        /* compraramos la clave sin encriptar: enviada por el usuario
+            con la clave encriptada de la tabla usuarios
+         */
+        $usuario = mysqli_fetch_assoc($resultado);
+        if( !password_verify( $usuClave, $usuario['usuClave'] ) ){
+            // si no coinciden -> redireccion
+            header('location: formModificarClave.php?error=1');
+            return false;
+        }
+        else{
+            //clave actual y clave en tabla usuarios coinciden
+            /* comparamos que NO coincidan las nuevas claves */
+            if( $_POST['newClave'] != $_POST['newClave2'] ){
+                // si no coinciden -> redireccion
+                header('location: formModificarClave.php?error=2');
+                return false;
+            }
+            /* acá sabemos que la clave actual esta OK
+                y que la clave nueva y repite también coinciden
+             */
+            /* encriptamos claver nueva y almacenamos en tabla usuarios */
+            $pwHash = password_hash($_POST['newClave'], PASSWORD_DEFAULT);
+            $sql = "UPDATE usuarios 
+                        SET usuClave = '".$pwHash."'
+                        WHERE idUsuario = ".$_SESSION['idUsuario'];
+            try {
+                return mysqli_query($link, $sql);
+            }catch ( Exception $e ){
+                echo $e->getMessage();
+                return false;
+            }
+
+        }
+    }
