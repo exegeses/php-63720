@@ -13,6 +13,35 @@
         return  $resultado;
     }
 
+    function buscarProductos( ) : mysqli_result
+    {
+        $search = $_GET['search'] ?? '';
+        $link = conectar();
+        $sql = "SELECT *, mkNombre, catNombre 
+                    FROM productos p
+                    JOIN marcas m 
+                      ON p.idMarca = m.idMarca
+                    JOIN categorias c 
+                      ON c.idCategoria = p.idCategoria
+                  WHERE prdNombre LIKE '%".$search."%'";
+
+        $filtroCategoria = "";
+        if ( isset( $_GET['idCategoria'] )  && $_GET['idCategoria'] != 0 ){
+            $filtroCategoria =  " AND p.idCategoria = ".$_GET['idCategoria'];
+        }
+
+        $filtroMarca = "";
+        if ( isset( $_GET['idMarca'] )  && $_GET['idMarca'] != 0 ){
+            $filtroMarca = " AND p.idMarca = ".$_GET['idMarca'];
+        }
+
+        $sql .= $filtroCategoria; // $sql = $sql . $filtroCategoria;
+        $sql .= $filtroMarca;
+
+        $resultado = mysqli_query($link, $sql);
+        return  $resultado;
+    }
+
     function subirImagen() : string
     {
         /*//si no enviaron archivo  agregarProducto()
