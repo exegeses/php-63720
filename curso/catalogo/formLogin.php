@@ -23,6 +23,11 @@
                 </button>
             </form>
         </div>
+        <div class="alert bg-light p-4 col-8 mx-auto shadow text-center">
+            <a href="formReset.php" class="btn btn-outline-secondary px-4">
+                restablecer mi contraseña
+            </a>
+        </div>
 <?php
         if( isset($_GET['error']) ){
             $error = $_GET['error'];

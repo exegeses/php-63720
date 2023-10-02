@@ -139,3 +139,93 @@ function verUsuarioPorID(  ) : array
 
         }
     }
+
+function generarClave( $length = 6 ) : string
+{
+    $chars = [
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+        "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
+        1,2,3,4,5,6,7,8,9,0
+    ];
+    $codigo = '';
+    $cantidad = count( $chars ) - 1;
+    for( $n = 0; $n < $length; $n++ ){
+        $codigo .= $chars[ rand( 0, $cantidad ) ];
+    }
+    return $codigo;
+}
+
+function almacenarCodigo( $codigo ) : bool
+{
+    $email = $_POST['usuEmail'];
+    $link = conectar();
+    $sql = "INSERT INTO password_resets
+                VALUES
+                    (
+                     DEFAULT,
+                     '".$codigo."',
+                     '".$email."',
+                     DEFAULT,
+                     DEFAULT
+                    )";
+    try {
+        $resultado = mysqli_query($link, $sql);
+        return $resultado;
+    }
+    catch (Exception $e){
+        echo $e->getMessage();
+        return false;
+    }
+}
+
+
+function enviarMail( $codigo ) : bool
+{
+    //capturamos datos enviados por el form
+    $email = $_POST['usuEmail'];
+
+    //configuramos datos de email a enviar
+    $destinatario = 'marcos@dropjar.com';
+    $asunto = 'Solicitud de modificación de contraseña';
+    $cuerpo = '<div style="border: 12px; 
+                               box-shadow: 0px 0px 8px #ccc;
+                               padding: 24px;
+                               font-family: Tahoma;
+                               font-size: 1.2em;
+                               width: 450px; margin:auto
+                               text-align: center">';
+    $cuerpo .= 'Copie y pegue este código <br>';
+    $cuerpo .= '<b style="font-size:2.5em; margin: 64px;">';
+    $cuerpo .= $codigo.'</b></div>';
+
+    #encabezados adicionales
+    $headers = 'From: contacto@empresa.com'. "\r\n";
+    $headers .= "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type: text/html; charset=UTF-8" . "\r\n";
+
+    //enviamos el emaiL
+    if( mail( $destinatario, $asunto, $cuerpo, $headers ) ){
+        return true;
+    }
+    return false;
+}
+
+function mailResetPass() : bool
+{
+    $usuEmail = $_POST['usuEmail'];
+    /* chequear que el email exista */
+    $link = conectar();
+    $sql = "SELECT 1 FROM usuarios
+               WHERE usuEmail = '".$usuEmail."'";
+    $resultado = mysqli_query($link, $sql);
+    $cantidad = mysqli_num_rows($resultado);
+
+    if( $cantidad ){
+        $codigo = generarClave();
+        almacenarCodigo( $codigo );
+        enviarMail( $codigo );
+        return true;
+    }
+    return false;
+
+}
