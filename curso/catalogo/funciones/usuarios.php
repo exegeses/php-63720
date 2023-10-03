@@ -227,5 +227,30 @@ function mailResetPass() : bool
         return true;
     }
     return false;
+}
 
+function chequearCodigo() : bool
+{
+    //capturamos código enviado
+    $codigo = $_POST['codigo'];
+    /* chequear codigo + activo = 1 */
+    $link = conectar();
+    $sql = "SELECT id, usuEmail
+                FROM password_resets
+                WHERE codigo = '".$codigo."'
+                  AND activo = 1";
+    $resultado = mysqli_query($link, $sql);
+    $cantidad = mysqli_num_rows( $resultado );
+    if( $cantidad ){
+        $datos = mysqli_fetch_assoc($resultado);
+        //seteamos activo en 0
+        $sql = "UPDATE password_resets
+                    SET activo = 0 
+                 WHERE id = ".$datos['id'];
+        mysqli_query($link, $sql);
+        /* almacenar en sesion el email */
+        $_SESSION['usuEmail'] = $datos['usuEmail'];
+        return true;
+    }
+    return false;
 }

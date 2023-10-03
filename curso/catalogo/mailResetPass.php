@@ -21,6 +21,13 @@
         <div class="alert text-danger bg-light p-4 col-8 mx-auto shadow">
             <?= $mensaje ?>
         </div>
+        <div class="alert bg-light p-4 col-8 mx-auto shadow">
+            <form action="formResetPass.php" method="post">
+                Ingrese el código enviado <br>
+                <input type="text" name="codigo" class="form-control my-3">
+                <button class="btn btn-dark">enviar</button>
+            </form>
+        </div>
 <?php
     }
 ?>
